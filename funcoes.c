@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#define N 250
 //Estrutura de dados para um ator
 typedef struct Actor
 {
     int id; //Codigo do ator
     char name[50];  //Nome do ator
-    int titles[3];  //Array com os codigos dos filmes do ator
+    int titles[4];  //Array com os codigos dos filmes do ator
     struct Actor *next; //Apontador para o seguinte
 }Actor;
 
@@ -14,18 +15,18 @@ typedef struct Actor
 typedef struct Film
 {
     int id; //Codgio do filme
-    char title[50]; //Titulo do filme
+    char title[N]; //Titulo do filme
     struct Film *next;  //Apontador para o seguinte
 }Film;
 
 //Insere um ator novo na lista
-Actor* insertActor(Actor *head , int id, char name[50], int titles[3])
+Actor* insertActor(Actor *head , int id, char name[50], int titles[4])
 {
     Actor* new = (Actor*) malloc (sizeof(Actor));
     new->id = id;
     strcpy(new->name,name);
     int i = 0;
-    while(i < 3)
+    while(i < 4)
     {
         new->titles[i] = titles[i];
         i++;
@@ -36,7 +37,7 @@ Actor* insertActor(Actor *head , int id, char name[50], int titles[3])
 }
 
 //Insere um filme novo na lista
-Film* insertFilm(Film *head , int id, char title[50])
+Film* insertFilm(Film *head , int id, char title[N])
 {
     Film* new = (Film*) malloc (sizeof(Film));
     new->id = id;
@@ -45,27 +46,68 @@ Film* insertFilm(Film *head , int id, char title[50])
     return new;
 }
 
+int convert(char str[40])
+{
+    char a[10];
+
+    for (int i = 0; i < 10; i++)
+    {
+        a[i] = str[i+2];
+    }
+
+    return atoi(a);
+}
 
 void printActor(Actor *head)
 {
-    while(head != NULL)
+    Actor *a = head;
+    while(a != NULL)
     {
-        printf("%d  %s  %d, %d, %d\n",head->id,head->name,head->titles[0],head->titles[1],head->titles[2]);
-        head = head->next;
+        printf("%d  %s  %d, %d, %d, %d\n",a->id,a->name,a->titles[0],a->titles[1],a->titles[2],a->titles[3]);
+        a = a->next;
     }
 }
 
 void printFilm(Film *head)
 {
-    while(head != NULL)
+    Film *a = head;
+    while(a != NULL)
     {
-        printf("%d  %s\n",head->id,head->title);
-        head = head->next;
+        printf("%d => %s\n",a->id,a->title);
+        a = a->next;
+    }
+    //printf("Size: %lu", sizeof(Film));
+}
+
+void print(Actor *ptr1, Film *ptr2)
+{
+    int i = 0;
+    Actor *pt1 = ptr1;
+    Film *pt2 = ptr2;
+    while(pt1 != NULL)
+    {
+        printf("=>%s:\n", pt1->name);
+        while(i < 4)
+        {   
+            while(pt2 != NULL)
+            {
+                if(pt2->id == pt1->titles[i])
+                {
+                    printf("\t-%s\n",pt2->title);
+                    break;
+                }
+                pt2 = pt2->next;
+            }
+            pt2 = ptr2;
+            i++;
+        }
+        i = 0;
+        pt1 = pt1->next;
     }
 }
 
 
-
+/*
 int main()
 {
 
@@ -87,3 +129,4 @@ int main()
 
     return 0;
 }
+*/
