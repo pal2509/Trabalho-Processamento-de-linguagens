@@ -43,4 +43,6 @@ void title(int id ,Film* head)
         }
         head = head->next;
     }
+    printf("\tErro => Não encontrado!!!\n");
+
 }

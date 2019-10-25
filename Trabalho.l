@@ -4,8 +4,6 @@
     Film    *filmpt = NULL;    
     int id = 0;
 
-
-%x ACTOR
 %x FILM
 %x A
 %x B
@@ -14,6 +12,7 @@
 %x E
 %x F
 %x G
+%x H
 
 %% 
 
@@ -27,7 +26,7 @@
 <FILM>[0-9]+       {
     //Lê o codigo do filme
     id = atoi(yytext);
-    printf("%d=>", atoi(yytext));
+    //printf("%d=>", atoi(yytext));
     BEGIN(A);   
 }
             
@@ -38,7 +37,7 @@
             
 <C>[^\t]+  {
     //Lê o titulo do filme
-    printf("%s\n",yytext);
+    //printf("%s\n",yytext);
     filmpt = insertFilm(filmpt, id, yytext);
     BEGIN(B);
 }
@@ -48,50 +47,44 @@
     BEGIN(FILM);
 }
 
-<FILM>nm
-
-<FILM>###" "nconst\tprimaryName\tbirthYear\tdeathYear\tprimaryProfession\tknowForTitles.+\n	    {   
-    //Lê quando começa os atores
-    //printFilm(filmpt);
-    printf("Leu %s",yytext);
-    return 0;
-    BEGIN(ACTOR);
-}
-
-<ACTOR>nm {}
-
-<ACTOR>[0-9]+   {    
+<FILM>###[ ]+nconst.+\n  {
+    //printf("Leu => %s\n",yytext);
     BEGIN(D);
 }
 
-<D>\t+
-
-<D>[^\t]+	{
-    printf("Actor: %s\n", yytext);
-    printf("Know for:\n");
+<D>nm[0-9]+\t {
     BEGIN(E);
 }
 
-<E>\t[^\t]+\t(\\N|[0-9]+)?\t[^\t]+\t	{
+
+<E>[^\t]+   {
+    printf("Actor/a: %s\n",yytext);
     BEGIN(F);
 }
 
-<F>tt   {}
-
-<F>[0-9]+	{
-    //printf("ID => %d\n",atoi(yytext));
-    title(atoi(yytext), filmpt);
+<F>\t[^\t]+\t[^\t]+\t[^\t]+\t {
     BEGIN(G);
 }
 
-<G>\,   {
-    BEGIN(F);
+<G>tt   {}
+
+<G>[0-9]+   {
+    //printf("ID => %s\n",yytext);
+    title(atoi(yytext), filmpt);
+    BEGIN(H);
 }
 
-<G>\n   {
-    BEGIN(ACTOR);
+<H>\,   {
+    BEGIN(G);
 }
 
+<H>\t+  {}
 
+<H>\n   {
+    BEGIN(D);
+}
 
+<<EOF>> {
+    return 0;
+}
 %%
