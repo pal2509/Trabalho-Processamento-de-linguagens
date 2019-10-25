@@ -1,14 +1,9 @@
 
     #include "funcoes.c"
 
-    Actor   *actpt = NULL;
     Film    *filmpt = NULL;    
     int id = 0;
-    char name[50];
-    int i = 0;
-    int titles[4];
 
-%x ACTOR
 %x FILM
 %x A
 %x B
@@ -16,79 +11,93 @@
 %x D
 %x E
 %x F
+%x G
+%x H
 
 %% 
 
 ###" "tconst\ttitleType\tprimaryTitle\toriginalTitle\tisAdult\tstartYear\tendYear\truntimeMinutes\tgenres\n	{BEGIN(FILM);}
 
-<FILM>tt    {}
-
+            
+<FILM>tt    {
+    //Lê o tt antes do codigo do filme
+}
+            
 <FILM>[0-9]+       {
-    //id = convert(yytext);
-    //printf("Leu %s\n",yytext);
-    id = atoi(yytext);
-    //printf("ID => %d\n", id);
+    //Lê o codigo do filme
+    id = atoi(yytext);//Converte o a string lida para int e guarda na variavel id
+    //printf("%d=>", atoi(yytext));
     BEGIN(A);   
 }
-
-<A>\t[^\t]+\t  {BEGIN(C);}
-
+            
+<A>\t[^\t]+\t  { 
+    //Lê o tipo de titulo
+    BEGIN(C);
+}
+            
 <C>[^\t]+  {
-    //printf("Leu %s\n", yytext);
-    filmpt = insertFilm(filmpt, id, yytext);
+    //Lê o titulo do filme
+    //printf("%s\n",yytext);
+    filmpt = insertFilm(filmpt, id, yytext);//Insere o filme na lista
     BEGIN(B);
 }
-
-<B>.+\n	{BEGIN(FILM);}
-
-<FILM>###" "nconst\tprimaryName\tbirthYear\tdeathYear\tprimaryProfession\tknownForTitles	{
-    //printFilm(filmpt);
-    BEGIN(ACTOR);
+            
+<B>.+\n	{
+    //Lê o resto da linha até ao \n
+    BEGIN(FILM);
 }
 
-<ACTOR>nm   {}
-
-<ACTOR>[0-9]+       {    
-    //printf("Leu %s\n",yytext);
-    //id = convert(yytext);
-    id = atoi(yytext);
-    //printf("ID => %d\n", id);
+<FILM>###[ ]+nconst.+\n  {
+    //Lê o cabeçalho de quando começa a lista dos atores
+    //printf("Leu => %s\n",yytext);
     BEGIN(D);
 }
 
-<D>\t+ {}
-
-<D>[^\t]+	{
-	//printf("Leu %s\n",yytext);
-    strcpy(name, yytext);
+<D>nm[0-9]+\t {
+    //Lê o id do ator
     BEGIN(E);
 }
 
-<E>\t[^\t]+\t[^\t]+\t[^\t]+\t	{BEGIN(F);}
 
-<F>\,   {}
-
-<F>tt
-
-<F>[0-9]+	{
-	//printf("Leu %s\n",yytext);
-    titles[i] = atoi(yytext);
-    i++;
+<E>[^\t]+   {
+    //Lê o nome do ator
+    printf("Actor/a: %s\n",yytext);//Escreve o nome no ecrã
+    BEGIN(F);
 }
 
-<F>\t+  {}
+<F>\t[^\t]+\t[^\t]+\t[^\t]+\t {
+    //Lê o que está entre o nome do ator e os titulos conhecidos por
+    BEGIN(G);
+}
 
-<F>\n   {
-    actpt = insertActor(actpt, id, name, titles);
-    //printActor(actpt);
-    i = 0;
-    BEGIN(ACTOR);
+<G>tt   {
+    //Lê o tt antes do id do filme
+}
+
+<G>[0-9]+   {
+    //Lê o id do filme
+    //printf("ID => %s\n",yytext);
+    title(atoi(yytext), filmpt);//Chama a função title para encontrar o titulo do filme
+    //e escreve-lo
+    BEGIN(H);
+}
+
+<H>\,   {
+    //Lê as virgulas
+    BEGIN(G);
+}
+
+<H>\t+  {
+    //Lê os tab que sobram no fim das linhas
+}
+
+<H>\n   {
+    //Lẽ a mudança de linha
+    BEGIN(D);
 }
 
 <<EOF>> {
-    //printFilm(filmpt);
-    //printActor(actpt);
-    print(actpt, filmpt);
+    //Fim do ficherio
     return 0;
 }
 %%

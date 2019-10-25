@@ -4,6 +4,9 @@ tt2132285	movie	The Bling Ring	The Bling Ring	0	2013	\N	90	Biography,Crime,Drama
 tt0241527	movie	Harry Potter and the Sorcerer's Stone	Harry Potter and the Sorcerer's Stone	0	2001	\N	152	Adventure,Family,Fantasy
 tt2771200	movie	Beauty and the Beast	Beauty and the Beast	0	2017	\N	129	Family,Fantasy,Musical
 tt1659337	movie	The Perks of Being a Wallflower	The Perks of Being a Wallflower	0	2012	\N	103	Drama
-								
+
+
 ### nconst	primaryName	birthYear	deathYear	primaryProfession	knownForTitles			
-nm0914612	Emma Watson	1990	\N	actress,soundtrack,producer	tt2132285,tt0241527,tt2771200,tt1659337			
+nm0914612	Emma Watson	1990	\N	actress,soundtrack,producer	tt2132285,tt0241527,tt2771200,tt1659337
+nm0914612	Emma Watson	1990	\N	actress,soundtrack,producer	tt2132285,tt0241527,tt2771200,tt1659337
+nm0914612	Emma Watson	1990	2032	actress,soundtrack,producer	tt2132285,tt0241527,tt2771200,tt1659337
