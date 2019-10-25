@@ -25,7 +25,7 @@
             
 <FILM>[0-9]+       {
     //Lê o codigo do filme
-    id = atoi(yytext);
+    id = atoi(yytext);//Converte o a string lida para int e guarda na variavel id
     //printf("%d=>", atoi(yytext));
     BEGIN(A);   
 }
@@ -38,7 +38,7 @@
 <C>[^\t]+  {
     //Lê o titulo do filme
     //printf("%s\n",yytext);
-    filmpt = insertFilm(filmpt, id, yytext);
+    filmpt = insertFilm(filmpt, id, yytext);//Insere o filme na lista
     BEGIN(B);
 }
             
@@ -48,43 +48,56 @@
 }
 
 <FILM>###[ ]+nconst.+\n  {
+    //Lê o cabeçalho de quando começa a lista dos atores
     //printf("Leu => %s\n",yytext);
     BEGIN(D);
 }
 
 <D>nm[0-9]+\t {
+    //Lê o id do ator
     BEGIN(E);
 }
 
 
 <E>[^\t]+   {
-    printf("Actor/a: %s\n",yytext);
+    //Lê o nome do ator
+    printf("Actor/a: %s\n",yytext);//Escreve o nome no ecrã
     BEGIN(F);
 }
 
 <F>\t[^\t]+\t[^\t]+\t[^\t]+\t {
+    //Lê o que está entre o nome do ator e os titulos conhecidos por
     BEGIN(G);
 }
 
-<G>tt   {}
+<G>tt   {
+    //Lê o tt antes do id do filme
+}
 
 <G>[0-9]+   {
+    //Lê o id do filme
     //printf("ID => %s\n",yytext);
-    title(atoi(yytext), filmpt);
+    title(atoi(yytext), filmpt);//Chama a função title para encontrar o titulo do filme
+    //e escreve-lo
     BEGIN(H);
 }
 
 <H>\,   {
+    //Lê as virgulas
     BEGIN(G);
 }
 
-<H>\t+  {}
+<H>\t+  {
+    //Lê os tab que sobram no fim das linhas
+}
 
 <H>\n   {
+    //Lẽ a mudança de linha
     BEGIN(D);
 }
 
 <<EOF>> {
+    //Fim do ficherio
     return 0;
 }
 %%
