@@ -32,3 +32,15 @@ void printFilm(Film *head)
     //printf("Size: %lu", sizeof(Film));
 }
 
+void title(int id ,Film* head)
+{
+    while(head != NULL)
+    {
+        if(head->id == id)
+        {
+            printf("\t-%s\n",head->title);
+            return;
+        }
+        head = head->next;
+    }
+}
