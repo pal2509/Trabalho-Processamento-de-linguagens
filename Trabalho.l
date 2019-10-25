@@ -27,7 +27,7 @@
 <FILM>[0-9]+       {
     //Lê o codigo do filme
     id = atoi(yytext);
-    //printf("%d=>", atoi(yytext));
+    printf("%d=>", atoi(yytext));
     BEGIN(A);   
 }
             
@@ -38,7 +38,7 @@
             
 <C>[^\t]+  {
     //Lê o titulo do filme
-    //printf("%s\n",yytext);
+    printf("%s\n",yytext);
     filmpt = insertFilm(filmpt, id, yytext);
     BEGIN(B);
 }
@@ -48,8 +48,9 @@
     BEGIN(FILM);
 }
 
+<FILM>nm
 
-<FILM>###" "nconst.+\n	    {   
+<FILM>###" "nconst\tprimaryName\tbirthYear\tdeathYear\tprimaryProfession\tknowForTitles.+\n	    {   
     //Lê quando começa os atores
     //printFilm(filmpt);
     printf("Leu %s",yytext);
@@ -57,8 +58,9 @@
     BEGIN(ACTOR);
 }
 
+<ACTOR>nm {}
 
-<ACTOR>nm[0-9]+   {    
+<ACTOR>[0-9]+   {    
     BEGIN(D);
 }
 
