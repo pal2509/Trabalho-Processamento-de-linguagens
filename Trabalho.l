@@ -19,6 +19,7 @@
 ###" "tconst\ttitleType\tprimaryTitle\toriginalTitle\tisAdult\tstartYear\tendYear\truntimeMinutes\tgenres\n	{BEGIN(FILM);}
 
             
+            
 <FILM>tt    {
     //Lê o tt antes do codigo do filme
 }
