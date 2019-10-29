@@ -35,7 +35,7 @@
     //Lê o tipo de titulo
     BEGIN(C);
 }
-            
+                                              
 <C>[^\t]+  {
     //Lê o titulo do filme
     //printf("%s\n",yytext);
