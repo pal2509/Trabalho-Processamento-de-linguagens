@@ -4,6 +4,7 @@
 
 #define N 400
 
+
 //estrutura de dados para um filme
 typedef struct Film
 {
