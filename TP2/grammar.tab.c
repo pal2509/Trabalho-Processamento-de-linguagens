@@ -1213,68 +1213,74 @@ yyreduce:
   YY_REDUCE_PRINT (yyn);
   switch (yyn)
     {
-        case 3:
+        case 2:
+#line 22 "grammar.y" /* yacc.c:1646  */
+    {showCommands((yyvsp[0].cmd));}
+#line 1220 "grammar.tab.c" /* yacc.c:1646  */
+    break;
+
+  case 3:
 #line 24 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = insertCommand((yyvsp[-1].cmd),(yyvsp[0].cmd));}
-#line 1220 "grammar.tab.c" /* yacc.c:1646  */
+#line 1226 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
 #line 25 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = (yyvsp[0].cmd);}
-#line 1226 "grammar.tab.c" /* yacc.c:1646  */
+#line 1232 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
 #line 28 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = newCommand(MOSTRA,(yyvsp[0].file));}
-#line 1232 "grammar.tab.c" /* yacc.c:1646  */
+#line 1238 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 6:
 #line 29 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = newCommand(ACRESCENTA,(yyvsp[0].file));}
-#line 1238 "grammar.tab.c" /* yacc.c:1646  */
+#line 1244 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
 #line 30 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = newCommand(APAGA,(yyvsp[0].file));}
-#line 1244 "grammar.tab.c" /* yacc.c:1646  */
+#line 1250 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 8:
 #line 31 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = newCommand(CONTA,(yyvsp[0].file));}
-#line 1250 "grammar.tab.c" /* yacc.c:1646  */
+#line 1256 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
 #line 32 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = newCommand(LISTA,(yyvsp[0].file));}
-#line 1256 "grammar.tab.c" /* yacc.c:1646  */
+#line 1262 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
 #line 33 "grammar.y" /* yacc.c:1646  */
     { (yyval.cmd) = newCommand(INFORMA,(yyvsp[0].file));}
-#line 1262 "grammar.tab.c" /* yacc.c:1646  */
+#line 1268 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 11:
 #line 36 "grammar.y" /* yacc.c:1646  */
     { (yyval.file) = insertFile((yyvsp[-1].str),(yyvsp[0].file));}
-#line 1268 "grammar.tab.c" /* yacc.c:1646  */
+#line 1274 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
   case 12:
 #line 37 "grammar.y" /* yacc.c:1646  */
     { (yyval.file) = newList((yyvsp[0].str));}
-#line 1274 "grammar.tab.c" /* yacc.c:1646  */
+#line 1280 "grammar.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1278 "grammar.tab.c" /* yacc.c:1646  */
+#line 1284 "grammar.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires

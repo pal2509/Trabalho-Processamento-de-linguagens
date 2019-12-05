@@ -18,7 +18,7 @@ informa     {return INFORMA;}
 conta   {return CONTA;}
 
 
-[^\t \n]+   {return FICH;}
+[^\t \n]+   {yylval.str =strdup(yytext); return FICH;}
 
 [ \t\n\r] {}
 

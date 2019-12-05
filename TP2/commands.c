@@ -31,3 +31,37 @@ File *insertFile(char file[], File* lst)
     new->next = lst;
     return new;
 }
+
+void showFiles(File *lst)
+{
+    if(lst == NULL)return;
+    else
+    {
+        printf("%s",lst->file);
+        showFiles(lst->next);
+    }
+}
+
+void showCommands(Command *lst)
+{
+    if(lst == NULL)
+    {
+        return;
+    }
+    else 
+    {
+        switch (lst->cmd)
+        {
+        case MOSTRA:
+            {
+                printf("mostra ");
+                showFiles(lst->files);
+                printf("\n");
+            }
+            break;
+        default:
+            break;
+        }
+        showCommands(lst->next);
+    }
+}

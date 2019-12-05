@@ -19,7 +19,7 @@
 %%
 
 
-progam : instructionList ;
+progam : instructionList {showCommands($1);} ;
 
 instructionList : instruction instructionList { $$ = insertCommand($1,$2);}
                 | instruction { $$ = $1;}
