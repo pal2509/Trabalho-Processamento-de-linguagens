@@ -5,6 +5,8 @@
 
 %%
 
+#.+\n   {}
+ 
 mostra  {return MOSTRA;}
 
 acrescenta  {return ACRESCENTA;}
@@ -17,10 +19,15 @@ informa     {return INFORMA;}
 
 conta   {return CONTA;}
 
+$[^\t \n]+ {yylval.str = strdup(yytext); return VAR;}
 
-[^\t \n]+   {yylval.str =strdup(yytext); return FICH;}
+= {return EQUAL;}
 
-[ \t\n\r] {}
+[^\t$ \n]+   {yylval.str =strdup(yytext); return FICH;}
+
+[ \t\r] {}
+
+\n  { return NL; }
 
 %%
 

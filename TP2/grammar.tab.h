@@ -51,7 +51,10 @@ extern int yydebug;
     CONTA = 261,
     LISTA = 262,
     INFORMA = 263,
-    FICH = 264
+    EQUAL = 264,
+    NL = 265,
+    FICH = 266,
+    VAR = 267
   };
 #endif
 
@@ -60,13 +63,13 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 8 "grammar.y" /* yacc.c:1909  */
+#line 9 "grammar.y" /* yacc.c:1909  */
 
     char *str;
     File *file;
     Command *cmd;
 
-#line 70 "grammar.tab.h" /* yacc.c:1909  */
+#line 73 "grammar.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

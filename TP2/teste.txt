@@ -1,1 +1,5 @@
-mostra ~/Documents/C/Trabalho/Trabalho-Processamento-de-linguagens/TP2
+mostra main.c
+$teste = main.c
+$texto = commands.c
+conta $texto $teste
+mostra $teste
