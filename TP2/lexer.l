@@ -19,6 +19,8 @@ informa     {return INFORMA;}
 
 conta   {return CONTA;}
 
+print.+ { yylval.str = strdup(yytext); return PRINT;}
+
 $[^\t \n]+ {yylval.str = strdup(yytext); return VAR;}
 
 = {return EQUAL;}

@@ -1,5 +1,5 @@
 mostra main.c
 $teste = main.c
 $texto = commands.c
-conta $texto $teste
+conta $texto lexer.l
 mostra $teste

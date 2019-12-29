@@ -54,7 +54,8 @@ extern int yydebug;
     EQUAL = 264,
     NL = 265,
     FICH = 266,
-    VAR = 267
+    VAR = 267,
+    PRINT = 268
   };
 #endif
 
@@ -69,7 +70,7 @@ union YYSTYPE
     File *file;
     Command *cmd;
 
-#line 73 "grammar.tab.h" /* yacc.c:1909  */
+#line 74 "grammar.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -1,12 +1,13 @@
 #include "commands.h"
 #include "grammar.tab.h"
 
-Command* newCommand(int cmd, File *lst)
+Command* newCommand(int cmd, File *lst, char *text)
 {
     Command *new = (Command*)malloc(sizeof(Command));
     new->files = lst;
     new->next = NULL;
     new->cmd = cmd;
+    new->text = text;
     return new;
 }
 
@@ -42,7 +43,7 @@ void showFiles(File *lst)
     }
 }
 
-void Execute(Command *lst)
+void Execute(Command *lst , VarList *vars)
 {
     if(lst == NULL)return;
     switch (lst->cmd)
@@ -121,9 +122,13 @@ void Execute(Command *lst)
                 else wait(NULL);
             }
             break;
-
+    case PRINT:
+            {
+                printText(lst->text, vars);
+            }
+            break;
         }
-    Execute(lst->next);
+    Execute(lst->next, vars);
 }
 
 int CountFiles(File *lst)
@@ -182,6 +187,39 @@ char *searchVar(VarList *lst, char *name)
     }
     return NULL;
 }
+
+
+void printText(char *text , VarList* lst)
+{
+    int i = 5;
+    int sizeText = sizeof(text);
+    printf("Size: %d",sizeText);
+    while( i < sizeText)
+    {   
+        if( text[i] == '$')
+        {
+            int j = i;
+            int count = 0;
+            while(text[j] != ' ')
+            {
+                count++;
+                j++;
+            }
+            j = i;
+            char var[count];
+            while (text[j] != ' ')
+            {
+                var[j] = text[j];
+                j++;
+            }
+            printf("%s", searchVar(lst, var));
+            i++;    
+        }
+        printf("%c", text[i]);
+        i++;
+    }
+}
+
 
 void showVariables(VarList *lst)
 {
