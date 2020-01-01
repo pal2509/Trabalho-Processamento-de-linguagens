@@ -3,3 +3,4 @@ $teste = main.c
 $texto = commands.c
 conta $texto lexer.l
 mostra $teste
+print "ola mundo $teste , bom ano"

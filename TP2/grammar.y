@@ -13,8 +13,8 @@
 }
 
 %token MOSTRA ACRESCENTA APAGA CONTA LISTA INFORMA EQUAL NL
-%token<str> FICH VAR PRINT 
-%type<str> value
+%token<str> FICH VAR PRINT STRING
+%type<str> value 
 %type<cmd> instruction instructionList 
 %type<file> fileList
 
@@ -45,7 +45,7 @@ fileList : value fileList    { $$ = insertFile($1,$2);}
         ;
 
 value : FICH    { $$ = $1;}
-    | VAR   { printf(">>%s\n",$1);$$ = searchVar(Variables,$1);}
+    | VAR  { printf(">>%s\n",$1);$$ = searchVar(Variables,$1);}
     ;
 
 

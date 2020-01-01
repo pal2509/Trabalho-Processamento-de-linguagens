@@ -19,7 +19,8 @@ informa     {return INFORMA;}
 
 conta   {return CONTA;}
 
-print.+ { yylval.str = strdup(yytext); return PRINT;}
+print" "\".+\" { printf("%s\n", yytext);
+    yylval.str = strdup(yytext); return PRINT;}
 
 $[^\t \n]+ {yylval.str = strdup(yytext); return VAR;}
 
@@ -30,6 +31,7 @@ $[^\t \n]+ {yylval.str = strdup(yytext); return VAR;}
 [ \t\r] {}
 
 \n  { return NL; }
+
 
 %%
 

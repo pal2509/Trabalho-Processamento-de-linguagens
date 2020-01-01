@@ -124,6 +124,7 @@ void Execute(Command *lst , VarList *vars)
             break;
     case PRINT:
             {
+                printf("%s\n", lst->text);
                 printText(lst->text, vars);
             }
             break;
@@ -191,29 +192,34 @@ char *searchVar(VarList *lst, char *name)
 
 void printText(char *text , VarList* lst)
 {
-    int i = 5;
-    int sizeText = sizeof(text);
-    printf("Size: %d",sizeText);
-    while( i < sizeText)
+    int i = 7;
+    printf("%s\n", text);
+    int size = 0;
+    while(text[size] != '\0')size++;
+    printf("%d\n", size); 
+    while( i < size - 1 )
     {   
-        if( text[i] == '$')
-        {
+        if(text[i] == '$')
+        {   
             int j = i;
-            int count = 0;
+            int varSize = 0;
             while(text[j] != ' ')
-            {
-                count++;
+            {   
+                varSize++;
                 j++;
             }
+            char var[varSize];
             j = i;
-            char var[count];
-            while (text[j] != ' ')
-            {
-                var[j] = text[j];
+            int k = 0;
+            while(text[j] != ' ')
+            {   
+                var[k] = text[j];
                 j++;
+                k++;
             }
             printf("%s", searchVar(lst, var));
-            i++;    
+
+            i = i + varSize;
         }
         printf("%c", text[i]);
         i++;
