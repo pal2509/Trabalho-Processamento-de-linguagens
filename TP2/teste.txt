@@ -2,5 +2,11 @@ mostra main.c
 $teste = main.c
 $texto = commands.c
 conta $texto lexer.l
-mostra $teste
-print "ola mundo $teste , bom ano"
+mostra $texto
+print "ola mundo $texto , bom ano"
+para-cada $fich da-pasta /home/paulo/Documents/C/Trabalho/Trabalho-Processamento-de-linguagens/TP2
+print "Contedúdo de: $fich  "
+conta $fich
+fim
+print "eu sou o $texto "
+acrescenta teste2.txt lexer.l

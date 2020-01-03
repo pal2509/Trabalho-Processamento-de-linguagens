@@ -17,31 +17,36 @@ Command* insertCommand(Command *cmd, Command *lst)
     return cmd;
 }
 
-File *newList(char file[])
+Command *newCicle(Command *lst, char *var, char *pasta, int cmd)
+{
+    Command* new = (Command*)malloc(sizeof(Command));
+    new->cicle.pasta = pasta;
+    new->cicle.var = var;
+    new->cicle.lst = lst;
+    new->cmd = cmd;
+    new->files = NULL;
+    new->next = NULL;
+    new->text = NULL;
+    return new;
+}
+
+
+File *newList(char *file)
 {
     File *new = (File*)malloc(sizeof(File));
-    new->file = strdup(file);
+    new->file = file;
     new->next = NULL;
     return new;
 }
 
-File *insertFile(char file[], File* lst)
+File *insertFile(char *file, File* lst)
 {
     File* new = (File*)malloc(sizeof(File));
-    new->file = strdup(file);
+    new->file = file;
     new->next = lst;
     return new;
 }
 
-void showFiles(File *lst)
-{
-    if(lst == NULL)return;
-    else
-    {
-        printf("%s",lst->file);
-        showFiles(lst->next);
-    }
-}
 
 void Execute(Command *lst , VarList *vars)
 {
@@ -52,7 +57,7 @@ void Execute(Command *lst , VarList *vars)
             {
                 File *f = lst->files;
                 char *args[CountFiles(f) + 2]; 
-                CreateArgArray(f,"cat",args);
+                CreateArgArray(f,"cat",args, vars);
                 int p = fork();
                 if(p == 0)
                 {
@@ -64,17 +69,22 @@ void Execute(Command *lst , VarList *vars)
     case ACRESCENTA:
             {
                 File *f = lst->files;
+                if(f->file[0] == '$')
+                {
+                    f->file = searchVar(vars,f->file);
+                }
                 int n = CountFiles(f);
                 char *args[n];
-                CreateArgArrayII(f,args,n);
+                CreateArgArrayII(f,args,n, vars);
                 Acrescenta(n, args); 
             }
             break;
     case INFORMA:
             {
+                
                 File *f = lst->files;
                 char *args[CountFiles(f) + 2]; 
-                CreateArgArray(f,"stat",args);
+                CreateArgArray(f,"stat",args, vars);
                 int p = fork();
                 if(p == 0)
                 {
@@ -84,23 +94,26 @@ void Execute(Command *lst , VarList *vars)
             }
         break;
     case CONTA:
-        {
+        {       
                 File *f = lst->files;
-                char *args[CountFiles(f) + 2]; 
-                CreateArgArray(f,"wc",args);
+                //printf(">> %s\n", lst->files->file);
+                //printf(">> %s\n", f->file);
+                char *args[CountFiles(lst->files) + 2]; 
+                CreateArgArray(lst->files,"wc",args, vars);
                 int p = fork();
                 if(p == 0)
                 {
                     execvp("wc", args);
                 }
                 else wait(NULL);
+                
         }
         break;
     case LISTA:
             {
                 File *f = lst->files;
                 char *args[CountFiles(f) + 2]; 
-                CreateArgArray(f,"ls",args);
+                CreateArgArray(f,"ls",args, vars);
                 int p = fork();
                 if(p == 0)
                 {
@@ -113,7 +126,7 @@ void Execute(Command *lst , VarList *vars)
             {
                 File *f = lst->files;
                 char *args[CountFiles(f) + 2]; 
-                CreateArgArray(f,"rm",args);
+                CreateArgArray(f,"rm",args, vars);
                 int p = fork();
                 if(p == 0)
                 {
@@ -124,11 +137,26 @@ void Execute(Command *lst , VarList *vars)
             break;
     case PRINT:
             {
-                printf("%s\n", lst->text);
                 printText(lst->text, vars);
             }
             break;
+    case PARA:
+        {
+            // 1. Criar lista de ficheiros na pasta
+            File *listaFich = createFileList(lst->cicle.pasta, NULL);
+            // 2. para cada ficheiro
+            while(listaFich != NULL)
+            {
+                vars = insertVar(vars, lst->cicle.var, listaFich->file);
+                Execute(lst->cicle.lst, vars);
+                listaFich = listaFich->next;
+            }
+            //    2,1 $var = nome do ficheiro
+            //    2.2 Avaliar "subcomando"
         }
+    break;
+        }
+
     Execute(lst->next, vars);
 }
 
@@ -145,36 +173,65 @@ int CountFiles(File *lst)
     return i;
 }
 
-void CreateArgArray(File *lst, char commad[], char *args[])
+void CreateArgArray(File *lst, char commad[], char *args[], VarList *vars)
 {
     args[0] = strdup(commad);
     int i = 1;
     File *f = lst;
     while(f != NULL)
     {
-        args[i] = f->file;
-        i++;
-        f = f->next; 
+        if(f->file[0] == '$')
+        {
+            args[i] = searchVar(vars, f->file);
+            i++;
+            f = f->next;    
+        }
+        else
+        {
+            args[i] = f->file;
+            i++;
+            f = f->next;
+        } 
     }
     args[i] = NULL;
 }
 
-void CreateArgArrayII(File *lst, char *args[], int n)
+void CreateArgArrayII(File *lst, char *args[], int n, VarList *vars)
 {
     int i = 0;
-    while (lst != NULL)
+    File *f = lst;
+    while (f != NULL)
     {
-        args[i] = strdup(lst->file);
+        if(f->file[0] == '$')
+        {
+            args[i] = strdup(searchVar(vars, f->file));
+            i++;
+            f = f->next;
+        }
+        else
+        {
+        args[i] = f->file;
         i++;
-        lst = lst->next;
+        f = f->next;
+        }
     }
 }
 
-VarList* insertVar(VarList *lst, char name[], char fich[])
+VarList* insertVar(VarList *lst, char *name, char *fich)
 {
+    VarList *v = lst;
+    while(v != NULL)
+    {
+        if(strcmp(v->name, name) == 0)
+        {
+            v->fich = fich;
+            return lst;
+        }
+        v = v->next;
+    }
     VarList *new = (VarList*)malloc(sizeof(VarList));
-    new->fich = strdup(fich);
-    new->name = strdup(name);
+    new->name = name;
+    new->fich = fich;
     new->next = lst;
     return new;
 }
@@ -186,17 +243,34 @@ char *searchVar(VarList *lst, char *name)
         if(strcmp(name,lst->name) == 0)return lst->fich;
         lst = lst->next;
     }
-    return NULL;
+    return strdup("Não encontrado!!!");
+}
+
+File *createFileList(char *pasta, File* lst)
+{
+    DIR *d;
+    struct dirent *dir;
+    d = opendir(pasta);
+    if(d != NULL)
+    {
+        while((dir = readdir(d)) != NULL)
+        {
+            lst = insertFile(strdup(dir->d_name),lst);
+        }
+    }
+    else perror("Erro");
+    closedir(d);
+    return lst;
 }
 
 
 void printText(char *text , VarList* lst)
 {
+    //showVariables(lst);
+    printf("\n");
     int i = 7;
-    printf("%s\n", text);
     int size = 0;
-    while(text[size] != '\0')size++;
-    printf("%d\n", size); 
+    while(text[size] != '\0')size++; 
     while( i < size - 1 )
     {   
         if(text[i] == '$')
@@ -208,6 +282,7 @@ void printText(char *text , VarList* lst)
                 varSize++;
                 j++;
             }
+            //printf("varsize>>> %d\n", varSize);
             char var[varSize];
             j = i;
             int k = 0;
@@ -217,7 +292,11 @@ void printText(char *text , VarList* lst)
                 j++;
                 k++;
             }
-            printf("%s", searchVar(lst, var));
+            while(lst != NULL)
+            {
+                if(strncmp(var,lst->name, varSize) == 0)printf("%s", lst->fich);
+                lst = lst->next;
+            }
 
             i = i + varSize;
         }
@@ -326,4 +405,23 @@ int Acrescenta(int argc, char* argv[])
     close(fd1);
     
     return 0;   
+}
+
+
+void showVars(VarList *lst)
+{
+    while(lst != NULL)
+    {
+        printf("var>> %s\n", lst->fich);
+        lst = lst->next;
+    }
+}
+
+void showFiles(File *lst)
+{
+    while(lst != NULL)
+    {
+        printf("File>> %s\n", lst->file);
+        lst = lst->next;
+    }
 }

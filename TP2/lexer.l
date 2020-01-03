@@ -19,8 +19,13 @@ informa     {return INFORMA;}
 
 conta   {return CONTA;}
 
-print" "\".+\" { printf("%s\n", yytext);
-    yylval.str = strdup(yytext); return PRINT;}
+para-cada {return PARA;}
+
+da-pasta  {return DA;}
+
+fim {return FIM;}
+
+print" "\".+\" {    yylval.str = strdup(yytext); return PRINT;}
 
 $[^\t \n]+ {yylval.str = strdup(yytext); return VAR;}
 
