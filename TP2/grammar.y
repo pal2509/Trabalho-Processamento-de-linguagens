@@ -40,7 +40,7 @@ instruction : MOSTRA fileList { $$ = newCommand(MOSTRA,$2, NULL);}
         | PARA VAR DA FICH NL instructionList FIM { 
                                                     $$ = newCicle($6,$2,$4,PARA);      
                                                     }
- 
+    
         ;
 
 fileList : value fileList    { $$ = insertFile($1,$2);} 
@@ -49,8 +49,6 @@ fileList : value fileList    { $$ = insertFile($1,$2);}
 
 value : FICH    { $$ = $1;}
     | VAR  { $$ = $1; }
-    ;
-
 
 
 %%

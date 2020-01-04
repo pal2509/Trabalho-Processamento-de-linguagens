@@ -23,7 +23,7 @@ para-cada {return PARA;}
 
 da-pasta  {return DA;}
 
-fim {return FIM;}
+fim-para {return FIM;}
 
 print" "\".+\" {    yylval.str = strdup(yytext); return PRINT;}
 
@@ -31,7 +31,7 @@ $[^\t \n]+ {yylval.str = strdup(yytext); return VAR;}
 
 = {return EQUAL;}
 
-[^\t$ \n]+   {yylval.str =strdup(yytext); return FICH;}
+[^\t \n]+   {yylval.str =strdup(yytext); return FICH;}
 
 [ \t\r] {}
 
