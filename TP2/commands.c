@@ -51,6 +51,8 @@ File *insertFile(char *file, File* lst)
 void Execute(Command *lst , VarList *vars)
 {
     if(lst == NULL)return;
+    printf("\n");
+
     switch (lst->cmd)
     {
     case MOSTRA:
@@ -145,6 +147,7 @@ void Execute(Command *lst , VarList *vars)
             // 1. Criar lista de ficheiros na pasta
             File *listaFich = createFileList(lst->cicle.pasta, NULL);
             // 2. para cada ficheiro
+            
             while(listaFich != NULL)
             {
                 vars = insertVar(vars, lst->cicle.var, listaFich->file);
@@ -327,7 +330,7 @@ void showCommands(Command *lst)
         {
         case MOSTRA:
             {
-                printf("mostra ");
+                printf("\nmostra ");
                 showFiles(lst->files);
                 printf("\n");
             }
@@ -348,7 +351,7 @@ void showCommands(Command *lst)
             break;
             case CONTA:
             {
-                printf("conta ");
+                printf("\nconta ");
                 showFiles(lst->files);
                 printf("\n");
             }
@@ -367,6 +370,15 @@ void showCommands(Command *lst)
                 printf("\n");
             }
             break;
+            case PRINT:
+            {
+                printf("\nprint ");
+                showFiles(lst->files);
+                printf(" >> %s",lst->text);
+                printf("\n");
+            }
+            break;
+            
         default:
             break;
         }
