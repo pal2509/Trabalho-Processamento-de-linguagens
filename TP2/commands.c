@@ -1,6 +1,7 @@
 #include "commands.h"
 #include "grammar.tab.h"
 
+//Cria um comando novo
 Command* newCommand(int cmd, File *lst, char *text)
 {
     Command *new = (Command*)malloc(sizeof(Command));
@@ -11,12 +12,14 @@ Command* newCommand(int cmd, File *lst, char *text)
     return new;
 }
 
+//Insere um comando na lista
 Command* insertCommand(Command *cmd, Command *lst)
 {
     cmd->next = lst;
     return cmd;
 }
 
+//Cria um comando novo, caso especial para ciclos
 Command *newCicle(Command *lst, char *var, char *pasta, int cmd)
 {
     Command* new = (Command*)malloc(sizeof(Command));
@@ -30,7 +33,7 @@ Command *newCicle(Command *lst, char *var, char *pasta, int cmd)
     return new;
 }
 
-
+//Cria uma lista de ficheiros
 File *newList(char *file)
 {
     File *new = (File*)malloc(sizeof(File));
@@ -39,6 +42,7 @@ File *newList(char *file)
     return new;
 }
 
+//Insere ficheiros numa lista
 File *insertFile(char *file, File* lst)
 {
     File* new = (File*)malloc(sizeof(File));
@@ -47,7 +51,7 @@ File *insertFile(char *file, File* lst)
     return new;
 }
 
-
+//Função principal para execução dos comandos lidos recursivamente
 void Execute(Command *lst , VarList *vars)
 {
     if(lst == NULL)return;
@@ -163,6 +167,7 @@ void Execute(Command *lst , VarList *vars)
     Execute(lst->next, vars);
 }
 
+//Conta o numero de ficherios de uma lista
 int CountFiles(File *lst)
 {
     int i = 0;
@@ -176,6 +181,7 @@ int CountFiles(File *lst)
     return i;
 }
 
+//Cria um array de argumentos para usar no exec
 void CreateArgArray(File *lst, char commad[], char *args[], VarList *vars)
 {
     args[0] = strdup(commad);
@@ -199,6 +205,7 @@ void CreateArgArray(File *lst, char commad[], char *args[], VarList *vars)
     args[i] = NULL;
 }
 
+//Cria um array de argumentos para o comando acrescenta
 void CreateArgArrayII(File *lst, char *args[], int n, VarList *vars)
 {
     int i = 0;
@@ -220,6 +227,7 @@ void CreateArgArrayII(File *lst, char *args[], int n, VarList *vars)
     }
 }
 
+//Insere variáveis numa lista
 VarList* insertVar(VarList *lst, char *name, char *fich)
 {
     VarList *v = lst;
@@ -239,6 +247,7 @@ VarList* insertVar(VarList *lst, char *name, char *fich)
     return new;
 }
 
+//Procura um variável na lista e retorna o seu valor
 char *searchVar(VarList *lst, char *name)
 {
     while(lst != NULL)
@@ -249,6 +258,7 @@ char *searchVar(VarList *lst, char *name)
     return strdup("Não encontrado!!!");
 }
 
+//Cria uma lista de ficherios de uma diretoria
 File *createFileList(char *pasta, File* lst)
 {
     DIR *d;
@@ -265,7 +275,6 @@ File *createFileList(char *pasta, File* lst)
     closedir(d);
     return lst;
 }
-
 
 void printText(char *text , VarList* lst)
 {
@@ -388,7 +397,7 @@ void showCommands(Command *lst)
 
 
 
-
+//Função para o comando acrescenta
 int Acrescenta(int argc, char* argv[])
 {    
     
